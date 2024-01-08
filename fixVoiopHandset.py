@@ -79,7 +79,7 @@ keys = {
   0x3d : "big handset N button (handset lifted off cradle) (big handset N button released, or handset lifted off cradle when last button released was big handset N button)",  # 61
   0x3e : "big handset N button (handset down) (pressed)",  # 62
   0x3f : "big handset N button (handset off cradle) (pressed)",  # 63
-  0x40 : "handset is placed into cradle after red hang up button pressed and released",  # 64
+  0x40 : "handset is placed into cradle after red hang up button pressed",  # 64
   0x41 : "red hangup (released) - or handset was removed from cradle",  # 65
   0x42 : "- unknown -",  # 66
   0x43 : "red hangup (pressed)",  # 67
@@ -87,18 +87,18 @@ keys = {
   0x45 : "mute (released)",  # 69
   0x46 : "- unknown -",  # 70
   0x47 : "mute (pressed)",  # 71
-  0x48 : "- hang up after hold button pressed and released -",  # 72
+  0x48 : "- hang up after hold button pressed -",  # 72
   0x49 : "handset up inner hold button (released)",  # 73
   0x4a : "- unknown 74 -",  # 74
   0x4b : "handset up inner hold button (pressed)",  # 75
-  0x4c : "- handset is placed into cradle after (vol-) button pressed and released -",  # 76
+  0x4c : "- handset is placed into cradle after (vol-) button pressed -",  # 76
   0x4d : "- vol- released or handset lifted when last button released was volume down (vol-) -",  # 77
   0x4e : "- unknown 78 -",  # 78
   0x4f : "- vol- pressed -",  # 79
-  0x50 : "- unknown 80 -",  # 80
-  0x51 : "- unknown 81 -",  # 81
+  0x50 : "- handset is placed into cradle after (contacts) button pressed -",  # 80
+  0x51 : "- contacts button released or handset lifted when last button released was contacts button-",  # 81
   0x52 : "- unknown 82 -",  # 82
-  0x53 : "- unknown 83 -"  #83
+  0x53 : "- contacts button pressed -"  #83
   # I might need more
 }
 

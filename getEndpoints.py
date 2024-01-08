@@ -15,3 +15,10 @@ for config in dev:
                 # check if this is an OUT endpoint
                 if usb.util.endpoint_direction(endpoint.bEndpointAddress) == usb.util.ENDPOINT_OUT:
                     print(f"  Found OUT endpoint: {endpoint.bEndpointAddress} with config value: {config.bConfigurationValue} and alternate setting:{iface.bAlternateSetting}")
+
+
+cfg = dev.get_active_configuration()
+for interface in cfg:
+    for endpoint in interface:
+        if usb.util.endpoint_direction(endpoint.bEndpointAddress) == usb.util.ENDPOINT_OUT:
+            print(f'OUT endpoint: {endpoint.bEndpointAddress}')

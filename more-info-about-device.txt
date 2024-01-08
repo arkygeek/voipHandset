@@ -36,6 +36,73 @@ would be crucial for understanding and implementing the desired behavior program
 
 -----------------------------
 
+Based on the information provided in the USB descriptors, it seems that the audio
+streaming isochronous endpoints are used for audio data transmission, and the HID
+endpoint (Endpoint 3, IN) is likely used for sending control or status information.
+
+To find the correct OUT endpoint for controlling the mute LED, you'll need to
+examine the descriptors specifically related to the control or status endpoint.
+
+In this case, the relevant part of the descriptor is:
+
+plaintext
+Copy code
+Interface Descriptor:
+bLength 9
+bDescriptorType 4
+bInterfaceNumber 0
+bAlternateSetting 0
+bNumEndpoints 0
+bInterfaceClass 1 [unknown]
+bInterfaceSubClass 2 [unknown]
+bInterfaceProtocol 0
+iInterface 0
+
+This part of the descriptor indicates that the interface has no endpoints, so it's
+likely that control or status information is sent through another interface.
+
+You may want to check other interfaces for control-related descriptors.
+
+However, it's important to note that without the actual HID report descriptor,
+it's challenging to determine the exact functionality of the HID endpoint.
+
+The report descriptor provides information about the data format and usage of the HID data.
+
+Here's a general guideline on how you might proceed:
+
+Check Other Interfaces:
+    Examine the descriptors for other interfaces, especially those with HID-related information.
+    Look for an interface with HID class (bInterfaceClass 3).
+    Look for HID Report Descriptor:
+    The HID report descriptor is crucial for understanding the data format and usage.
+    If possible, obtain the HID report descriptor for the device.
+    The report descriptor is usually provided in the device's technical documentation.
+
+
+Decode HID Reports:
+
+If you have the HID report descriptor, you can decode the HID reports sent to and
+from the device. This will help you identify the report or command structure for
+controlling the mute LED.
+
+Experiment:
+
+Experiment with sending different commands to the HID endpoint based on your
+understanding of the HID report descriptor. Use a USB monitoring tool to observe
+the traffic between the computer and the device.
+
+Remember to refer to the technical documentation for the device, as it should
+provide specific details about the HID report format and the commands used to
+control LEDs or other features.
+
+
+
+
+
+
+
+-------------------------------
+
 The provided information is a USB device descriptor for a particular device.
 Here are the key details:
 
@@ -107,4 +174,309 @@ Channels: 1
 Channel Configuration: Not specified
 Terminal ID: 10
 Type: USB Streaming (wTerminalType: 0x0101)
-These interfaces represent different audio endpoints for speakers. Interface 2 is configured for stereo output, while Interface 3 is configured for a single channel output. These could correspond to different speakers or audio output configurations on the device.
+
+
+
+
+
+
+
+
+
+
+
+-------------------
+
+
+
+
+
+
+
+
+
+from  USB PROBER (MacOS Lion era)
+
+
+
+
+
+Full Speed device @ 14 (0x14600000): .............................................   Composite device: "HP Internet Handset"
+    Port Information:   0x001a
+           Not Captive
+           Attached to Root Hub
+           External Device
+           Connected
+           Enabled
+    Number Of Endpoints (includes EP0):
+        Total Endpoints for Configuration 1 (current):   4
+    Device Descriptor
+        Descriptor Version Number:   0x0200
+        Device Class:   0   (Composite)
+        Device Subclass:   0
+        Device Protocol:   0
+        Device MaxPacketSize:   8
+        Device VendorID/ProductID:   0x03F0/0x1C07   (Hewlett Packard)
+        Device Version Number:   0x0009
+        Number of Configurations:   1
+        Manufacturer String:   1 "Hewlett-Packard"
+        Product String:   2 "HP Internet Handset"
+        Serial Number String:   4 "0000000001"
+    Configuration Descriptor (current config): ......................   "G9 v1.0.0.0"
+        Length (and contents):   302
+            Raw Descriptor (hex)    0000: 09 02 2E 01 04 01 03 80  64 09 04 00 00 00 01 01
+            Raw Descriptor (hex)    0010: 00 00 0A 24 01 00 01 67  00 02 01 02 0C 24 02 0D
+            Raw Descriptor (hex)    0020: 01 02 00 01 00 00 00 00  09 24 06 06 0D 01 03 00
+            Raw Descriptor (hex)    0030: 00 0C 24 02 0C 01 01 00  02 03 00 00 00 0D 24 04
+            Raw Descriptor (hex)    0040: 09 02 0C 06 02 03 00 00  00 00 0D 24 06 01 09 02
+            Raw Descriptor (hex)    0050: 55 01 02 00 02 00 00 09  24 03 0E 01 03 00 01 00
+            Raw Descriptor (hex)    0060: 09 24 06 02 0D 01 03 00  00 07 24 05 08 01 02 00
+            Raw Descriptor (hex)    0070: 09 24 03 0A 01 01 00 08  00 09 04 01 00 00 01 02
+            Raw Descriptor (hex)    0080: 00 00 09 04 01 01 01 01  02 00 00 07 24 01 0C 00
+            Raw Descriptor (hex)    0090: 01 00 0E 24 02 01 02 02  10 00 00 19 00 80 BB 00
+            Raw Descriptor (hex)    00a0: 09 05 01 0D C0 00 01 00  00 07 25 01 01 02 01 00
+            Raw Descriptor (hex)    00b0: 09 04 01 02 01 01 02 00  00 07 24 01 0C 00 01 00
+            Raw Descriptor (hex)    00c0: 0E 24 02 01 01 02 10 00  00 19 00 80 BB 00 09 05
+            Raw Descriptor (hex)    00d0: 01 0D 60 00 01 00 00 07  25 01 01 02 01 00 09 04
+            Raw Descriptor (hex)    00e0: 02 00 00 01 02 00 00 09  04 02 01 01 01 02 00 00
+            Raw Descriptor (hex)    00f0: 07 24 01 0A 00 01 00 0E  24 02 01 01 02 10 00 00
+            Raw Descriptor (hex)    0100: 19 00 80 BB 00 09 05 84  0D 60 00 01 00 00 07 25
+            Raw Descriptor (hex)    0110: 01 01 02 01 00 09 04 03  00 01 03 00 00 00 09 21
+            Raw Descriptor (hex)    0120: 00 01 00 01 22 3B 00 07  05 83 03 02 00 08
+        Number of Interfaces:   4
+        Configuration Value:   1
+        Attributes:   0x80 (bus-powered)
+        MaxPower:   200 ma
+        Interface #0 - Audio/Control
+            Alternate Setting   0
+            Number of Endpoints   0
+            Interface Class:   1   (Audio)
+            Interface Subclass;   1   (Control)
+            Interface Protocol:   0
+            Audio Control Class Specific Header
+                Descriptor Version Number:   01.00
+                Class Specific Size:   103
+                Number of Audio Interfaces:   2
+                Audio Interface Number:   1
+                Audio Interface Number:   2
+                Dump Contents (hex):   0A 24 01 00 01 67 00 02 01 02
+            Audio Class Specific Input Terminal
+                Terminal ID:   13
+                Input Terminal Type:   0x201 (Microphone)
+                OutTerminal ID:   0 [NONE]
+                Number of Channels:   1
+                Spatial config of channels:   0000000000000000
+                String index for first logical channel:   0
+                Terminal Name String Index:   0 [NONE]
+            Audio Class Specific Feature
+                Unit ID:   6
+                Source ID:   13
+                Control Size:   1
+                Number of Channels (ch):   1
+                    Master Channel:......................... ( Volume, Mute )
+                    Left Front:............................. (  )
+                Feature Unit Name String Index:   0
+                Dump Contents (hex):   09 24 06 06 0D 01 03 00 00
+            Audio Class Specific Input Terminal
+                Terminal ID:   12
+                Input Terminal Type:   0x101 (USB streaming)
+                OutTerminal ID:   0 [NONE]
+                Number of Channels:   2
+                Spatial config of channels:   0000000000000011
+                   (null)
+                   (null)
+                String index for first logical channel:   0
+                Terminal Name String Index:   0 [NONE]
+            Audio Class Specific Mixer Unit
+                Unit ID:   9
+                Number of pins:   2
+                Source ID Pin[1]:   12
+                Source ID Pin[2]:   6
+                Dump Contents (hex):   0D 24 04 09 02 0C 06 02 03 00 00 00 00
+            Audio Class Specific Feature
+                Unit ID:   1
+                Source ID:   9
+                Control Size:   2
+                Number of Channels (ch):   2
+                    Master Channel:......................... ( Bass Boost, Automatic Gain, Treble, Bass, Mute )
+                    Left Front:............................. ( Volume )
+                    Right Front:............................ ( Volume )
+                Feature Unit Name String Index:   0
+                Dump Contents (hex):   0D 24 06 01 09 02 55 01 02 00 02 00 00
+            Audio Class Specific Output Terminal
+                Terminal ID:   14
+                Output Terminal Type:   0x301 (Speaker)
+                InTerminal ID:   0 [NONE]
+                Source ID:   1
+                Terminal Name String Index:   0 [NONE]
+            Audio Class Specific Feature
+                Unit ID:   2
+                Source ID:   13
+                Control Size:   1
+                Number of Channels (ch):   1
+                    Master Channel:......................... ( Volume, Mute )
+                    Left Front:............................. (  )
+                Feature Unit Name String Index:   0
+                Dump Contents (hex):   09 24 06 02 0D 01 03 00 00
+            Audio Class Specific Selector Unit
+                Unit ID:   8
+                Number of pins:   1
+                Source ID Pin[0]:   2
+                Dump Contents (hex):   07 24 05 08 01 02 00
+            Audio Class Specific Output Terminal
+                Terminal ID:   10
+                Output Terminal Type:   0x101 (USB Isochronous Stream)
+                InTerminal ID:   0 [NONE]
+                Source ID:   8
+                Terminal Name String Index:   0 [NONE]
+        Interface #1 - Audio/Streaming
+            Alternate Setting   0
+            Number of Endpoints   0
+            Interface Class:   1   (Audio)
+            Interface Subclass;   2   (Streaming)
+            Interface Protocol:   0
+        Interface #1 - Audio/Streaming (#1)
+            Alternate Setting   1
+            Number of Endpoints   1
+            Interface Class:   1   (Audio)
+            Interface Subclass;   2   (Streaming)
+            Interface Protocol:   0
+            Audio Control Class Specific Header
+                Audio Stream General
+                    Endpoint Terminal ID:   12
+                    Delay:   0 frames     (Delay NOT SUPPORTED)
+                    Format Tag:   0x0001 (PCM)
+            Audio Class Specific Audio Data Format
+                Audio Stream Format Type Desc.
+                    Format Type:   1 PCM
+                    Number Of Channels:   2 STEREO
+                    Sub Frame Size:   2
+                    Bit Resolution:   16
+                    Sample Frequency Type:   0x00 (Continuous)
+                    Lower Sample Freq:    6400 Hz
+                    Upper Sample Freq:   48000 Hz
+            Endpoint 0x01 - Isochronous Output
+                Address:   0x01  (OUT)
+                Attributes:   0x0D  (Isochronous synchronous data endpoint)
+                Max Packet Size:   192
+                Polling Interval:   1 ms
+            Class-Specific AS Audio EndPoint
+                Attributes:   0x01  Sample Frequency,
+                bLockDelayUnits:   0x02  (Decoded PCM Samples)
+                wLockDelay:   1 Decoded PCM Samples
+        Interface #1 - Audio/Streaming (#2)
+            Alternate Setting   2
+            Number of Endpoints   1
+            Interface Class:   1   (Audio)
+            Interface Subclass;   2   (Streaming)
+            Interface Protocol:   0
+            Audio Control Class Specific Header
+                Audio Stream General
+                    Endpoint Terminal ID:   12
+                    Delay:   0 frames     (Delay NOT SUPPORTED)
+                    Format Tag:   0x0001 (PCM)
+            Audio Class Specific Audio Data Format
+                Audio Stream Format Type Desc.
+                    Format Type:   1 PCM
+                    Number Of Channels:   1 MONO
+                    Sub Frame Size:   2
+                    Bit Resolution:   16
+                    Sample Frequency Type:   0x00 (Continuous)
+                    Lower Sample Freq:    6400 Hz
+                    Upper Sample Freq:   48000 Hz
+            Endpoint 0x01 - Isochronous Output
+                Address:   0x01  (OUT)
+                Attributes:   0x0D  (Isochronous synchronous data endpoint)
+                Max Packet Size:   96
+                Polling Interval:   1 ms
+            Class-Specific AS Audio EndPoint
+                Attributes:   0x01  Sample Frequency,
+                bLockDelayUnits:   0x02  (Decoded PCM Samples)
+                wLockDelay:   1 Decoded PCM Samples
+        Interface #2 - Audio/Streaming
+            Alternate Setting   0
+            Number of Endpoints   0
+            Interface Class:   1   (Audio)
+            Interface Subclass;   2   (Streaming)
+            Interface Protocol:   0
+        Interface #2 - Audio/Streaming (#1)
+            Alternate Setting   1
+            Number of Endpoints   1
+            Interface Class:   1   (Audio)
+            Interface Subclass;   2   (Streaming)
+            Interface Protocol:   0
+            Audio Control Class Specific Header
+                Audio Stream General
+                    Endpoint Terminal ID:   10
+                    Delay:   0 frames     (Delay NOT SUPPORTED)
+                    Format Tag:   0x0001 (PCM)
+            Audio Class Specific Audio Data Format
+                Audio Stream Format Type Desc.
+                    Format Type:   1 PCM
+                    Number Of Channels:   1 MONO
+                    Sub Frame Size:   2
+                    Bit Resolution:   16
+                    Sample Frequency Type:   0x00 (Continuous)
+                    Lower Sample Freq:    6400 Hz
+                    Upper Sample Freq:   48000 Hz
+            Endpoint 0x84 - Isochronous Input
+                Address:   0x84  (IN)
+                Attributes:   0x0D  (Isochronous synchronous data endpoint)
+                Max Packet Size:   96
+                Polling Interval:   1 ms
+            Class-Specific AS Audio EndPoint
+                Attributes:   0x01  Sample Frequency,
+                bLockDelayUnits:   0x02  (Decoded PCM Samples)
+                wLockDelay:   1 Decoded PCM Samples
+        Interface #3 - HID
+            Alternate Setting   0
+            Number of Endpoints   1
+            Interface Class:   3   (HID)
+            Interface Subclass;   0
+            Interface Protocol:   0
+            HID Descriptor
+                Descriptor Version Number:   0x0100
+                Country Code:   0
+                Descriptor Count:   1
+                Descriptor 1
+                    Type:   0x22  (Report Descriptor)
+                    Length (and contents):   59
+                        Raw Descriptor (hex)    0000: 05 0C 09 01 A1 01 09 E9  09 EA 15 00 25 01 95 02
+                        Raw Descriptor (hex)    0010: 75 01 81 02 95 06 81 01  06 00 FF 09 01 95 01 81
+                        Raw Descriptor (hex)    0020: 22 09 02 81 22 09 03 15  00 25 3F 75 06 95 01 81
+                        Raw Descriptor (hex)    0030: 02 09 04 26 FF 00 75 08  B1 02 C0
+                    Parsed Report Descriptor:
+                          Usage Page    (Consumer)
+                          Usage 1 (0x1)
+                              Collection (Application)
+                                Usage 233 (0xe9)
+                                Usage 234 (0xea)
+                                Logical Minimum.........    (0)
+                                Logical Maximum.........    (1)
+                                Report Count............    (2)
+                                Report Size.............    (1)
+                                Input...................   (Data, Variable, Absolute, No Wrap, Linear, Preferred State, No Null Position, Bitfield)
+                                Report Count............    (6)
+                                Input...................   (Constant, Array, Absolute)
+                                Usage Page    (Vendor defined 0)
+                                Usage 1 (0x1)
+                                Report Count............    (1)
+                                Input...................   (Data, Variable, Absolute, No Wrap, Linear, No Preferred, No Null Position, Bitfield)
+                                Usage 2 (0x2)
+                                Input...................   (Data, Variable, Absolute, No Wrap, Linear, No Preferred, No Null Position, Bitfield)
+                                Usage 3 (0x3)
+                                Logical Minimum.........    (0)
+                                Logical Maximum.........    (63)
+                                Report Size.............    (6)
+                                Report Count............    (1)
+                                Input...................   (Data, Variable, Absolute, No Wrap, Linear, Preferred State, No Null Position, Bitfield)
+                                Usage 4 (0x4)
+                                Logical Maximum.........    (255)
+                                Report Size.............    (8)
+                                Feature.................   (Data, Variable, Absolute, No Wrap, Linear, Preferred State, No Null Position, Nonvolatile, Bitfield)
+                              End Collection
+            Endpoint 0x83 - Interrupt Input
+                Address:   0x83  (IN)
+                Attributes:   0x03  (Interrupt no synchronization data endpoint)
+                Max Packet Size:   2
+                Polling Interval:   8 ms
