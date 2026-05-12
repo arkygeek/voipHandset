@@ -1,10 +1,23 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: voiphandset
+Upstream-Contact: Jason Jorgenson <jjorgenson@gmail.com>
 Source: https://github.com/arkygeek/voipHandset
 
 Files: *
 Copyright: 2026 Jason Jorgenson
 License: GPL-3.0+
+
+Files: supportDocs/*
+Copyright: 2007 Hewlett-Packard Development Company, L.P.
+License: HP-archived-documentation
+Comment:
+ The PDFs in supportDocs/ are HP product documentation (user guide,
+ data sheet, support articles) for the HP Internet Handset, included
+ verbatim from HP's now-archived support site for reference purposes
+ only. They are NOT covered by the GPL — they remain the copyright of
+ Hewlett-Packard Development Company, L.P. and are redistributed here
+ under fair-use / archival principles. If HP requests removal, please
+ contact the upstream maintainer and they will be removed.
 
 License: GPL-3.0+
  This program is free software: you can redistribute it and/or modify
@@ -17,5 +30,16 @@ License: GPL-3.0+
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
  .
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ .
  On Debian systems, the full text of the GNU General Public License
  version 3 can be found in the file `/usr/share/common-licenses/GPL-3'.
+
+License: HP-archived-documentation
+ The PDFs in supportDocs/ are HP's product documentation, included
+ here for archival reference. They are not covered by the project
+ license; all rights are reserved by Hewlett-Packard Development
+ Company, L.P. The files are redistributed under fair-use principles
+ for the purpose of supporting users of obsolete hardware. No
+ endorsement by or affiliation with HP is implied.

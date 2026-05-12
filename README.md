@@ -306,7 +306,14 @@ systemctl --user restart handset-daemon.service
 
 ## License
 
-GPL-3.0-or-later. See `debian/copyright`.
+This project is licensed **GPL-3.0-or-later**. See the full license
+text in [LICENSE](LICENSE), or the machine-readable
+[debian/copyright](debian/copyright) for per-file details.
+
+Exception: the PDFs in `supportDocs/` are HP product documentation
+(© 2007 Hewlett-Packard Development Company, L.P.) included under
+fair-use / archival principles. They are NOT covered by the GPL — see
+[supportDocs/README.md](supportDocs/README.md) for details.
 
 ## Acknowledgements
 
