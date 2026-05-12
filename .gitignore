@@ -2,3 +2,18 @@
 notifications.jsonl
 __pycache__/
 *.pyc
+
+# Debian build artifacts
+.pybuild/
+build/
+voiphandset.egg-info/
+*.deb
+*.buildinfo
+*.changes
+debian/voiphandset/
+debian/.debhelper/
+debian/*.debhelper
+debian/*.debhelper.log
+debian/files
+debian/voiphandset.substvars
+debian/debhelper-build-stamp

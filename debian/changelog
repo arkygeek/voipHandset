@@ -1,0 +1,32 @@
+voiphandset (0.2.2-1) oracular; urgency=medium
+
+  * Fix: ring engine now plays through PipeWire (paplay) instead of
+    direct kernel ALSA. The PipeWire loopback module that backs the
+    speakerphone virtual sink holds the kernel device exclusively, so
+    aplay's plughw access was failing silently.
+
+ -- Jason Jorgenson <jjorgenson@gmail.com>  Tue, 12 May 2026 13:25:00 +0000
+
+voiphandset (0.2.1-1) oracular; urgency=medium
+
+  * Fix: D-Bus name registration broke because BecomeMonitor() was being
+    called on the same connection that owned the service name, putting
+    it into read-only mode. Now uses two private SessionBus connections.
+  * Fix: ring engine notifies the router when it finishes naturally, so
+    call_state correctly returns to IDLE.
+  * PipeWire loopback target updated to the iec958-stereo profile name.
+
+ -- Jason Jorgenson <jjorgenson@gmail.com>  Tue, 12 May 2026 13:15:00 +0000
+
+voiphandset (0.2.0-1) oracular; urgency=medium
+
+  * Initial Debian packaging.
+  * Refactor into voiphandset Python package; install handset script.
+  * Add D-Bus IPC interface (com.arkygeek.Handset).
+  * Add PipeWire loopback config for "HP Handset (Speakerphone)" sink.
+  * Add call-state machine (idle/ringing/handset/holding/speakerphone).
+  * Auto bit-0 routing based on cradle state and PipeWire stream activity.
+  * Ring on incoming Rambox WhatsApp calls (US ring); Messenger burst
+    heuristic (UK ring) for 3-in-10s notifications.
+
+ -- Jason Jorgenson <jjorgenson@gmail.com>  Tue, 12 May 2026 12:00:00 +0000

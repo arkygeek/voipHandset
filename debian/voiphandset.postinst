@@ -1,0 +1,42 @@
+#!/bin/sh
+set -e
+
+case "$1" in
+    configure)
+        # Reload udev so the rule takes effect immediately
+        if [ -x /bin/udevadm ] || [ -x /usr/bin/udevadm ]; then
+            udevadm control --reload-rules || true
+            udevadm trigger --subsystem-match=hidraw || true
+        fi
+
+        # Reload PipeWire config for any logged-in user
+        # (Users will need to restart their PipeWire session, or log out/in,
+        # for the speakerphone virtual sink to appear.)
+        if command -v systemctl >/dev/null 2>&1; then
+            systemctl daemon-reload >/dev/null 2>&1 || true
+        fi
+
+        cat <<'EOF'
+voiphandset installed.
+
+To enable the daemon for your user, run:
+
+    systemctl --user daemon-reload
+    systemctl --user enable --now handset-daemon.service
+
+To make the speakerphone virtual sink appear in your audio menu, restart
+your PipeWire session:
+
+    systemctl --user restart pipewire pipewire-pulse wireplumber
+
+You may also need to be in the 'plugdev' group:
+
+    sudo usermod -aG plugdev $USER
+
+Then log out and back in.
+EOF
+        ;;
+esac
+
+#DEBHELPER#
+exit 0

@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "voiphandset"
+version = "0.2.2"
+description = "User-space Linux driver for the HP Internet Handset (G9, USB 03f0:1c07)"
+readme = "README.md"
+authors = [{ name = "Jason Jorgenson" }]
+license = { text = "GPL-3.0-or-later" }
+requires-python = ">=3.10"
+dependencies = [
+  "hid >= 1.0",
+]
+classifiers = [
+  "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+  "Operating System :: POSIX :: Linux",
+  "Topic :: System :: Hardware :: Hardware Drivers",
+]
+
+[project.scripts]
+handset = "voiphandset.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["voiphandset*"]

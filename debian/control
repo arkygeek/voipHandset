@@ -1,0 +1,44 @@
+Source: voiphandset
+Section: sound
+Priority: optional
+Maintainer: Jason Jorgenson <jjorgenson@gmail.com>
+Build-Depends: debhelper-compat (= 13),
+               dh-python,
+               python3-all,
+               python3-setuptools,
+               pybuild-plugin-pyproject
+Standards-Version: 4.6.2
+Homepage: https://github.com/arkygeek/voipHandset
+
+Package: voiphandset
+Architecture: all
+Depends: ${python3:Depends},
+         ${misc:Depends},
+         python3,
+         python3-dbus,
+         python3-gi,
+         python3-hid,
+         alsa-utils,
+         pulseaudio-utils,
+         pipewire,
+         libhidapi-hidraw0,
+         systemd
+Recommends: pipewire-pulse, wireplumber
+Description: User-space Linux driver for the HP Internet Handset (G9)
+ Driver and daemon for the Hewlett-Packard Internet Handset (USB
+ 03f0:1c07, firmware G9 v1.0.0.0). Provides:
+ .
+   * A `handset` command for controlling the device (ring, speakerphone
+     mode, state inspection, reset).
+   * A systemd user service that rings the base speaker on incoming
+     Rambox calls (WhatsApp and Messenger).
+   * A PipeWire virtual sink "HP Handset (Speakerphone)" that makes the
+     base speaker available as a regular system audio output.
+   * A call-state machine that mimics a real phone:
+       - lift handset      -> answer / earpiece
+       - cradle (no hold)  -> hang up
+       - hold then cradle  -> hands-free via base speaker
+       - big-N off cradle  -> end hands-free call
+ .
+ The device works as a class-compliant USB Audio + HID device; this
+ package only adds the routing logic and user-facing controls.

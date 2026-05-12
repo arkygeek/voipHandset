@@ -1,0 +1,2 @@
+# Grant `plugdev` group access to the HP Internet Handset HID interface.
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="03f0", ATTRS{idProduct}=="1c07", MODE="0660", GROUP="plugdev"
