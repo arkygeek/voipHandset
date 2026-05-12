@@ -149,6 +149,36 @@ class Router:
             self._handset_lifted = lifted
             self._apply()
 
+    def on_cradle_change(self, lifted: bool):
+        """Authoritative cradle-state update from polling.
+
+        Does the same call-state transitions that the HID input event
+        handlers would do — but driven by polled byte[2] instead of
+        the unreliable HID 0x40 / 0x41 / 0x3D / 0x3F events. Without
+        this, a handset that got into HANDSET state (e.g. via a green-dial
+        press) would never transition back to IDLE on cradle-down,
+        leaving the route stuck on earpiece.
+        """
+        with self._lock:
+            if lifted == self._handset_lifted:
+                return  # no change
+            self._handset_lifted = lifted
+            log.info("cradle: %s (poll)", "lifted" if lifted else "cradled")
+
+            if lifted:
+                # Lifting during ringing answers; lifting from speakerphone
+                # returns the call to the earpiece.
+                if self._state in (CallState.RINGING, CallState.SPEAKERPHONE):
+                    self._transition(CallState.HANDSET)
+            else:
+                # Cradling: HOLDING → SPEAKERPHONE (hands-free), HANDSET → IDLE (hang up)
+                if self._state == CallState.HOLDING:
+                    self._transition(CallState.SPEAKERPHONE)
+                elif self._state == CallState.HANDSET:
+                    self._transition(CallState.IDLE)
+
+            self._apply()
+
     def get_state(self) -> dict:
         with self._lock:
             return {
@@ -181,7 +211,10 @@ class Router:
 
     def _apply(self):
         route_to_base = self._compute_route()
-        self.device.set_speaker_route(route_to_base)
+        # force=True: always write to device. The optimisation that
+        # skipped no-op writes was hiding a real cache/device divergence
+        # bug where re-cradle wouldn't actually flip bit 0 back to 1.
+        self.device.set_speaker_route(route_to_base, force=True)
 
     def _transition(self, new_state: CallState):
         if new_state == self._state:

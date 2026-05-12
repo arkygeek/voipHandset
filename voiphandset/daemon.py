@@ -23,6 +23,7 @@ from voiphandset.pipewire_monitor import PipeWireMonitor
 from voiphandset.cradle_monitor import CradleMonitor
 from voiphandset.controls import Controls
 
+
 log = logging.getLogger("voiphandset.daemon")
 
 MESSENGER_BURST_COUNT = 3
@@ -206,9 +207,9 @@ class Daemon:
             self.ring.stop(f"state -> {new_state.value}")
 
     def _on_cradle_change(self, lifted: bool):
-        # Authoritative source for cradle state (HID input reports miss
-        # the simple put-back-in-cradle case).
-        self.router.set_handset_lifted_initial(lifted)
+        # Authoritative source for cradle state — also drives state
+        # transitions (HANDSET→IDLE on cradle, HOLDING→SPEAKERPHONE, etc.).
+        self.router.on_cradle_change(lifted)
 
     def _hid_event(self, code: int):
         # Stop ring on lift / hangup

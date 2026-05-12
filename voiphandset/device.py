@@ -77,17 +77,22 @@ class Device:
         except Exception as e:
             log.warning("feature write failed: %s", e)
 
-    def set_bit(self, mask: int, on: bool):
+    def set_bit(self, mask: int, on: bool, force_write: bool = False):
         with self._lock:
             new = (self._feature_byte | mask) if on else (self._feature_byte & ~mask)
-            if new == self._feature_byte:
+            if new == self._feature_byte and not force_write:
                 return
             self._feature_byte = new
             self._write_feature()
 
-    def set_speaker_route(self, base: bool):
-        """True = USB audio routes to base speaker; False = handset earpiece."""
-        self.set_bit(BIT_SPEAKER_ROUTE, base)
+    def set_speaker_route(self, base: bool, force: bool = False):
+        """True = USB audio routes to base speaker; False = handset earpiece.
+
+        Pass force=True to write even if our cached feature byte already has
+        the bit in the desired state — useful when the device's actual state
+        may have drifted from ours (e.g., after a USB reset or external write).
+        """
+        self.set_bit(BIT_SPEAKER_ROUTE, base, force_write=force)
 
     def set_handset_led(self, on: bool):
         self.set_bit(BIT_HANDSET_LED, on)

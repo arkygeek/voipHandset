@@ -1,3 +1,21 @@
+voiphandset (0.2.4-1) oracular; urgency=medium
+
+  * Fix: cradle-down didn't restore audio to the base speaker if the
+    call-state machine had ever entered HANDSET state (e.g. via an
+    accidental green-dial press, or via a real call). The polled
+    cradle event was only updating the lifted flag, not driving the
+    HANDSET → IDLE / HOLDING → SPEAKERPHONE state transitions. Added
+    Router.on_cradle_change() which does both.
+
+  * Fix: writes to the route bit (HID feature-report bit 0) are now
+    forced through to the device on every Router._apply(), even when
+    the cached feature byte already matches the desired value. The
+    old skip-no-op optimization was masking a divergence between our
+    cached state and the device's actual state, leaving the route
+    stuck on earpiece after re-cradle.
+
+ -- Jason Jorgenson <jjorgenson@gmail.com>  Tue, 12 May 2026 14:55:00 +0000
+
 voiphandset (0.2.3-1) oracular; urgency=medium
 
   * Add cradle-state polling: a CradleMonitor thread reads byte[2]
