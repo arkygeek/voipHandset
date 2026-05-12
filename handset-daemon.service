@@ -1,0 +1,15 @@
+[Unit]
+Description=HP Internet Handset daemon — ring on Rambox calls
+After=graphical-session.target sound.target
+PartOf=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 %h/dev/voipHandset/voipHandset/handset_daemon.py
+Restart=on-failure
+RestartSec=5
+# Inherit the user session bus and ALSA access
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=graphical-session.target
