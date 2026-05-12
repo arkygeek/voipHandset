@@ -28,6 +28,14 @@ HID_HANDSET_INTO_CRADLE = 0x40
 HID_BIG_N_PRESSED_CRADLE = 0x3E
 HID_HANDSET_LIFTED_CODES = {HID_HANDSET_REMOVED, HID_BIG_N_LIFTED}
 
+# Volume + mute (on the base unit / handset)
+HID_VOL_UP_PRESSED = 0x3B       # auto-repeats while held
+HID_VOL_UP_RELEASED = 0x39
+HID_VOL_DOWN_PRESSED = 0x4F     # auto-repeats while held
+HID_VOL_DOWN_RELEASED = 0x4D
+HID_MUTE_PRESSED = 0x47
+HID_MUTE_RELEASED = 0x45
+
 
 class Device:
     """Thread-safe HID Feature-Report manager."""

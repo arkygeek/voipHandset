@@ -13,10 +13,15 @@ from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import GLib
 
 from voiphandset import DBUS_NAME, DBUS_PATH, DBUS_IFACE
-from voiphandset.device import Device
+from voiphandset.device import (
+    Device,
+    HID_VOL_UP_PRESSED, HID_VOL_DOWN_PRESSED, HID_MUTE_PRESSED,
+)
 from voiphandset.ring import RingEngine, PATTERNS
 from voiphandset.routing import Router, CallState
 from voiphandset.pipewire_monitor import PipeWireMonitor
+from voiphandset.cradle_monitor import CradleMonitor
+from voiphandset.controls import Controls
 
 log = logging.getLogger("voiphandset.daemon")
 
@@ -188,6 +193,7 @@ class Daemon:
         self.device = Device()
         self.ring = RingEngine(self.device, on_finished=self._on_ring_finished)
         self.router = Router(self.device, on_state_change=self._on_state_change)
+        self.controls = Controls(self.device)
         self.matcher = NotificationMatcher(self.ring, self.router)
 
     def _on_ring_finished(self):
@@ -199,10 +205,27 @@ class Daemon:
         if new_state != CallState.RINGING and self.ring.is_ringing():
             self.ring.stop(f"state -> {new_state.value}")
 
+    def _on_cradle_change(self, lifted: bool):
+        # Authoritative source for cradle state (HID input reports miss
+        # the simple put-back-in-cradle case).
+        self.router.set_handset_lifted_initial(lifted)
+
     def _hid_event(self, code: int):
         # Stop ring on lift / hangup
         if code in {0x41, 0x3D, 0x43} and self.ring.is_ringing():
             self.ring.stop(f"HID 0x{code:02x}")
+
+        # Volume + mute handlers (independent of routing/call state)
+        if code == HID_VOL_UP_PRESSED:
+            self.controls.volume_up()
+            return
+        if code == HID_VOL_DOWN_PRESSED:
+            self.controls.volume_down()
+            return
+        if code == HID_MUTE_PRESSED:
+            self.controls.toggle_mute()
+            return
+
         self.router.on_hid_event(code)
 
     def run(self):
@@ -230,9 +253,14 @@ class Daemon:
         hid_listener = HIDListener(self.device, self._hid_event)
         hid_listener.start()
 
-        # PipeWire monitor
+        # PipeWire monitor — watches for streams on the speakerphone virtual sink
         pw_monitor = PipeWireMonitor(self.router.set_pipewire_active)
         pw_monitor.start()
+
+        # Cradle monitor — polls byte[2] of the feature report, since HID
+        # input reports miss the "put handset back in cradle" event
+        cradle_monitor = CradleMonitor(self.device, self._on_cradle_change)
+        cradle_monitor.start()
 
         log.info("Daemon running. Ctrl-C to exit.")
         loop = GLib.MainLoop()
@@ -244,6 +272,7 @@ class Daemon:
             self.ring.stop("shutdown")
             hid_listener.stop()
             pw_monitor.stop()
+            cradle_monitor.stop()
             self.device.close()
 
 

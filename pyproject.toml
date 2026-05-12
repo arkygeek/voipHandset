@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "voiphandset"
-version = "0.2.2"
+version = "0.2.3"
 description = "User-space Linux driver for the HP Internet Handset (G9, USB 03f0:1c07)"
 readme = "README.md"
 authors = [{ name = "Jason Jorgenson" }]

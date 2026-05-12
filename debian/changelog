@@ -1,3 +1,23 @@
+voiphandset (0.2.3-1) oracular; urgency=medium
+
+  * Add cradle-state polling: a CradleMonitor thread reads byte[2]
+    of the 64-byte feature report every 500 ms. Fixes the issue where
+    putting the handset back in the cradle without first pressing
+    red-hangup didn't return audio routing to the base speaker — the
+    HID interrupt endpoint doesn't fire an event in that case, so the
+    cradle state has to be polled.
+  * Add handlers for the VOL+ / VOL- buttons on the base unit.
+    Pressing them now changes the device's PulseAudio sink volume
+    by ±5 %. Auto-repeat works as expected when the button is held.
+  * Add handler for the MUTE button on the handset. Toggles mic mute
+    via PulseAudio and syncs the mute LED (bit 6 of the HID feature
+    report) to match. Initial mute state is read from PulseAudio on
+    daemon startup.
+  * New modules: voiphandset.cradle_monitor, voiphandset.controls.
+  * Depends: pulseaudio-utils (already in 0.2.2).
+
+ -- Jason Jorgenson <jjorgenson@gmail.com>  Tue, 12 May 2026 14:15:00 +0000
+
 voiphandset (0.2.2-1) oracular; urgency=medium
 
   * Fix: ring engine now plays through PipeWire (paplay) instead of
