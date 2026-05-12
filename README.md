@@ -1,5 +1,10 @@
 # voiphandset
 
+> **Status: Beta.** All advertised features work on the reference
+> hardware, but the project is pre-1.0 — small breaking changes are
+> possible between minor versions. See the status table below for
+> what's working and what isn't.
+
 A user-space Linux driver for the **HP Internet Handset (G9)** — a USB
 phone Hewlett-Packard sold around 2007 to plug into Windows-only
 Skype. Turns it into a useful peripheral on modern Linux:
