@@ -17,3 +17,4 @@ debian/*.debhelper.log
 debian/files
 debian/voiphandset.substvars
 debian/debhelper-build-stamp
+ai-project-history/

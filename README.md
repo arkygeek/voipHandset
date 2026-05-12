@@ -314,6 +314,4 @@ GPL-3.0-or-later. See `debian/copyright`.
   hardware capabilities (the 1 W ringer rating that triggered the
   search for the route bit).
 - The reverse engineering was done in collaboration with Claude
-  Sonnet 4.6, with mic-feedback testing as the breakthrough
-  technique. Full session notes live in the
-  `ai-project-history/voip-handset/` submodule.
+  Sonnet 4.6, with mic-feedback testing as the breakthrough technique.
