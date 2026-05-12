@@ -1,0 +1,3 @@
+[submodule "ai-project-history"]
+	path = ai-project-history
+	url = git@github.com:arkygeek/ai-project-history.git
